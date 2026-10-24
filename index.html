@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doubt Hub | Ask Anything, Learn Everything</title>
+  <meta name="description" content="Doubt Hub is a free AI-powered learning website. Ask questions and discover simple answers.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; padding: 24px 14px; min-height: 100vh;
+      font-family: Arial, sans-serif; color: #202044;
+      background: linear-gradient(135deg,#e9eaff,#f8f5ff,#e2f5ff);
+    }
+    header {
+      max-width: 900px; margin: auto; font-size: 23px;
+      font-weight: bold; color: #5145cd;
+    }
+    main { max-width: 680px; margin: 75px auto 30px; text-align: center; }
+    .tag {
+      display: inline-block; background: white; color: #5145cd;
+      padding: 9px 15px; border-radius: 30px; font-size: 13px;
+    }
+    h1 { font-size: clamp(36px,8vw,58px); line-height: 1.12; }
+    h1 span { color: #635bdf; }
+    p { color: #62627d; line-height: 1.7; }
+    .card {
+      background: white; padding: 25px; border-radius: 20px;
+      box-shadow: 0 15px 45px #5145cd18; text-align: left;
+    }
+    input {
+      width: 100%; padding: 15px; margin: 12px 0;
+      border: 1px solid #dedcf5; border-radius: 10px; font-size: 16px;
+    }
+    button {
+      width: 100%; padding: 15px; border: 0; border-radius: 10px;
+      background: #5145cd; color: white; font-size: 17px;
+      font-weight: bold; cursor: pointer;
+    }
+    button:disabled { opacity: .6; }
+    #answer {
+      display: none; margin-top: 18px; padding: 16px;
+      border-radius: 10px; background: #f5f5ff;
+      white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7;
+    }
+    footer { text-align: center; color: #77758f; font-size: 13px; margin: 30px 0; }
+  </style>
+</head>
+<body>
+  <header>🎓 Doubt Hub</header>
+  <main>
+    <div class="tag">✨ YOUR AI LEARNING COMPANION</div>
+    <h1>Ask anything.<br><span>Learn everything.</span></h1>
+    <p>Have a doubt? Ask a question and discover a simple, helpful answer.</p>
+    <section class="card">
+      <h2>💡 What would you like to know?</h2>
+      <form id="questionForm">
+        <input id="question" type="text" placeholder="E.g. What is photosynthesis?" required>
+        <button id="searchButton" type="submit">🔍 Ask Doubt Hub</button>
+      </form>
+      <div id="answer" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer>Made for curious minds ❤️ · Doubt Hub</footer>
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyOpDaanCx7IQHuAOoGzHr58lfpPptPYE6ilQWbZxEYtp3ASd2Gv-yjeg_Ynlv8sUH4ZA/exec";
+
+    document.getElementById("questionForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const question = document.getElementById("question").value.trim();
+      const answer = document.getElementById("answer");
+      const button = document.getElementById("searchButton");
+
+      answer.style.display = "block";
+      answer.textContent = "Checking your question...";
+      button.disabled = true;
+
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+          body: new URLSearchParams({ question: question })
+        });
+        answer.textContent = await response.text();
+      } catch (err) {
+        answer.textContent = "The connection could not be completed. Please try again.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
